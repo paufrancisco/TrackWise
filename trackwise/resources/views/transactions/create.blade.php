@@ -13,7 +13,6 @@
             <form method="POST" action="{{ route('transactions.store') }}">
                 @csrf
 
-                {{-- Type Selector --}}
                 <div style="margin-bottom: 24px;">
                     <label class="field-label">Transaction Type</label>
                     <div class="type-selector">
@@ -36,7 +35,6 @@
 
                 <div style="display: flex; flex-direction: column; gap: 18px;">
 
-                    {{-- Title --}}
                     <div>
                         <label class="field-label" for="title">Title</label>
                         <input id="title" name="title" type="text"
@@ -48,7 +46,6 @@
                         @enderror
                     </div>
 
-                    {{-- Amount + Date --}}
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div>
                             <label class="field-label" for="amount">Amount</label>
@@ -67,7 +64,6 @@
                         </div>
                     </div>
 
-                    {{-- Category --}}
                     <div>
                         <label class="field-label" for="categorySelect">Category</label>
                         <select id="categorySelect" name="category"
@@ -86,7 +82,6 @@
                         @enderror
                     </div>
 
-                    {{-- Description --}}
                     <div>
                         <label class="field-label" for="description">Description <span style="opacity:0.5; font-size:10px;">(optional)</span></label>
                         <textarea id="description" name="description" rows="3"
@@ -113,24 +108,24 @@
 </div>
 
 <script>
-  const filterCategories = () => {
-    const checked = document.querySelector('input[name="type"]:checked')
-    const type = checked ? checked.value : 'expense'
-    const select = document.getElementById('categorySelect')
+    const filterCategories = () => {
+        const checked = document.querySelector('input[name="type"]:checked')
+        const type = checked ? checked.value : 'expense'
+        const select = document.getElementById('categorySelect')
 
-    Array.from(select.options).forEach(opt => {
-      if (!opt.value) return
-      opt.hidden = opt.dataset.type !== type
+        Array.from(select.options).forEach(opt => {
+            if (!opt.value) return
+            opt.hidden = opt.dataset.type !== type
+        })
+
+        if (select.selectedOptions[0]?.hidden) select.value = ''
+    }
+
+    document.querySelectorAll('input[name="type"]').forEach(r => {
+        r.addEventListener('change', filterCategories)
     })
 
-    if (select.selectedOptions[0]?.hidden) select.value = ''
-  }
-
-  document.querySelectorAll('input[name="type"]').forEach(r => {
-    r.addEventListener('change', filterCategories)
-  })
-
-  filterCategories()
+    filterCategories()
 </script>
 
 @endsection
