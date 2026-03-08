@@ -8,12 +8,6 @@ use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    /**
-     * Display the main dashboard with summary stats and chart data.
-     *
-     * @param  Request $request the incoming HTTP request
-     * @return View
-     */
     public function index(Request $request): View
     {
         $user         = $request->user();
@@ -31,6 +25,11 @@ class DashboardController extends Controller
 
         $expenseByCategory = $transactions
             ->where('type', 'expense')
+            ->groupBy('category')
+            ->map(fn ($items) => $items->sum('amount'));
+
+        $incomeByCategory = $transactions          // 👈 added
+            ->where('type', 'income')
             ->groupBy('category')
             ->map(fn ($items) => $items->sum('amount'));
 
@@ -59,6 +58,7 @@ class DashboardController extends Controller
             'totalExpense',
             'balance',
             'expenseByCategory',
+            'incomeByCategory',      
             'monthlyData',
             'recentTransactions'
         ));

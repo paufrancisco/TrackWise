@@ -34,14 +34,30 @@
 
 {{-- Charts --}}
 <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 16px; margin-bottom: 24px;">
+
+    {{-- Pie Card with Tabs --}}
     <div class="card">
         <div class="card-header">
-            <span class="card-title">Expenses by Category</span>
+            <div style="display: flex; gap: 6px;">
+                <button id="tab-expense"
+                    style="padding: 4px 10px; font-size: 11px; font-weight: 600; border-radius: 6px; border: none; cursor: pointer; font-family: inherit; background: var(--accent); color: #0f1117;"
+                    onclick="switchPieTab('expense')">
+                    Expenses
+                </button>
+                <button id="tab-income"
+                    style="padding: 4px 10px; font-size: 11px; font-weight: 600; border-radius: 6px; border: none; cursor: pointer; font-family: inherit; background: transparent; color: var(--muted);"
+                    onclick="switchPieTab('income')">
+                    Income
+                </button>
+            </div>
         </div>
-        <div class="card-pad" style="display: flex; align-items: center; justify-content: center;">
-            <canvas id="pieChart" style="max-height: 220px;"></canvas>
+        <div class="card-pad" style="display: flex; align-items: center; justify-content: center; min-height: 240px;">
+            <canvas id="expensesPieChart" style="max-height: 220px;"></canvas>
+            <canvas id="incomePieChart" style="max-height: 220px; display: none;"></canvas>
         </div>
     </div>
+
+    {{-- Bar Chart --}}
     <div class="card">
         <div class="card-header">
             <span class="card-title">Monthly Overview</span>
@@ -51,6 +67,7 @@
             <canvas id="barChart" style="max-height: 220px;"></canvas>
         </div>
     </div>
+
 </div>
 
 {{-- Recent Transactions --}}
@@ -103,43 +120,48 @@
     </table>
 </div>
 
+@endsection
+
+@push('scripts')
 <script>
-  Chart.defaults.color = '#6b7280'
-  Chart.defaults.borderColor = '#2a2d3a'
+  var COLORS = ['#6ee7b7','#f87171','#60a5fa','#fbbf24','#a78bfa','#fb7185','#34d399'];
+  var expenseData = {!! json_encode($expenseByCategory) !!};
+  var incomeData  = {!! json_encode($incomeByCategory) !!};
+  var monthlyData = {!! json_encode($monthlyData) !!};
 
-  const pieCtx = document.getElementById('pieChart')
-  const expenseData = @json($expenseByCategory)
+  var PIE_OPTIONS = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16, font: { size: 11, family: 'DM Sans' } } }
+    },
+    cutout: '65%'
+  };
 
-  new Chart(pieCtx, {
+  new Chart(document.getElementById('expensesPieChart'), {
     type: 'doughnut',
     data: {
       labels: Object.keys(expenseData),
-      datasets: [{
-        data: Object.values(expenseData),
-        backgroundColor: ['#6ee7b7','#f87171','#60a5fa','#fbbf24','#a78bfa','#fb7185','#34d399'],
-        borderColor: '#16181f',
-        borderWidth: 3,
-      }]
+      datasets: [{ data: Object.values(expenseData), backgroundColor: COLORS, borderColor: '#16181f', borderWidth: 3 }]
     },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: 'bottom', labels: { padding: 16, font: { size: 11, family: 'DM Sans' } } }
-      },
-      cutout: '65%',
-    }
-  })
+    options: PIE_OPTIONS
+  });
 
-  const barCtx = document.getElementById('barChart')
-  const monthlyData = @json($monthlyData)
+  new Chart(document.getElementById('incomePieChart'), {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(incomeData),
+      datasets: [{ data: Object.values(incomeData), backgroundColor: COLORS, borderColor: '#16181f', borderWidth: 3 }]
+    },
+    options: PIE_OPTIONS
+  });
 
-  new Chart(barCtx, {
+  new Chart(document.getElementById('barChart'), {
     type: 'bar',
     data: {
-      labels: monthlyData.map(m => m.month),
+      labels: monthlyData.map(function(m) { return m.month; }),
       datasets: [
-        { label: 'Income', data: monthlyData.map(m => m.income), backgroundColor: 'rgba(110,231,183,0.7)', borderRadius: 4 },
-        { label: 'Expenses', data: monthlyData.map(m => m.expense), backgroundColor: 'rgba(248,113,113,0.7)', borderRadius: 4 }
+        { label: 'Income',   data: monthlyData.map(function(m) { return m.income; }),  backgroundColor: 'rgba(110,231,183,0.7)', borderRadius: 4 },
+        { label: 'Expenses', data: monthlyData.map(function(m) { return m.expense; }), backgroundColor: 'rgba(248,113,113,0.7)', borderRadius: 4 }
       ]
     },
     options: {
@@ -150,7 +172,15 @@
         y: { grid: { color: '#2a2d3a' }, ticks: { font: { size: 11 } } }
       }
     }
-  })
-</script>
+  });
 
-@endsection
+  function switchPieTab(tab) {
+    document.getElementById('expensesPieChart').style.display = tab === 'expense' ? 'block' : 'none';
+    document.getElementById('incomePieChart').style.display   = tab === 'income'  ? 'block' : 'none';
+    document.getElementById('tab-expense').style.background   = tab === 'expense' ? 'var(--accent)' : 'transparent';
+    document.getElementById('tab-expense').style.color        = tab === 'expense' ? '#0f1117' : 'var(--muted)';
+    document.getElementById('tab-income').style.background    = tab === 'income'  ? 'var(--accent)' : 'transparent';
+    document.getElementById('tab-income').style.color         = tab === 'income'  ? '#0f1117' : 'var(--muted)';
+  }
+</script>
+@endpush
