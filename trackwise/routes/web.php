@@ -12,7 +12,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/transactions/export/pdf', [TransactionController::class, 'exportPdf'])
+    Route::get('/transactions/export/pdf', [TransactionController::class, 'export'])
         ->name('transactions.export.pdf');
 
     Route::get('/transactions/export/excel', [TransactionController::class, 'exportExcel'])
