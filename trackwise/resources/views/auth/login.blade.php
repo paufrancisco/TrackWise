@@ -208,7 +208,7 @@
 <div class="auth-wrap">
     <div class="auth-logo">
         <span>Track<em>Wise</em></span>
-        <p>Personal finance, simplified</p>
+        <p>Instant control over your spending</p>
     </div>
 
     <div class="auth-card">
