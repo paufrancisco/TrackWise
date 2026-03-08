@@ -26,7 +26,6 @@
 
         body { background: var(--bg); color: var(--text); min-height: 100vh; margin: 0; }
 
-        /* ── Sidebar ── */
         .sidebar {
             position: fixed; top: 0; left: 0;
             width: var(--sidebar-w); height: 100vh;
@@ -66,7 +65,6 @@
         }
         .user-name { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* ── Main ── */
         .main-wrap { margin-left: var(--sidebar-w); min-height: 100vh; display: flex; flex-direction: column; }
         .topbar {
             height: 60px; border-bottom: 1px solid var(--border);
@@ -78,7 +76,6 @@
         .topbar-actions { display: flex; align-items: center; gap: 12px; }
         .content { padding: 32px; flex: 1; }
 
-        /* ── Buttons ── */
         .btn {
             display: inline-flex; align-items: center; gap: 6px;
             padding: 8px 16px; border-radius: 8px;
@@ -94,14 +91,12 @@
         .btn-danger:hover { background: rgba(248,113,113,0.2); }
         .btn-sm { padding: 5px 12px; font-size: 12px; }
 
-        /* ── Flash ── */
         .flash-success {
             background: rgba(110,231,183,0.08); border: 1px solid rgba(110,231,183,0.2);
             color: var(--accent); padding: 12px 20px; border-radius: 8px;
             font-size: 13px; margin: 16px 32px 0;
         }
 
-        /* ── Cards ── */
         .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
         .card-pad { padding: 24px; }
         .card-header {
@@ -110,7 +105,6 @@
         }
         .card-title { font-size: 13px; font-weight: 600; color: var(--text); }
 
-        /* ── Stat Cards ── */
         .stat-card {
             background: var(--surface); border: 1px solid var(--border);
             border-radius: 12px; padding: 24px; position: relative; overflow: hidden;
@@ -126,7 +120,6 @@
         .stat-balance .stat-value { color: var(--accent3); }
         .stat-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
 
-        /* ── Table ── */
         .data-table { width: 100%; border-collapse: collapse; }
         .data-table th {
             text-align: left; font-size: 11px; font-weight: 600;
@@ -139,17 +132,14 @@
         .data-table tr:last-child td { border-bottom: none; }
         .data-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
 
-        /* ── Badges ── */
         .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
         .badge-income { background: rgba(110,231,183,0.1); color: var(--accent); }
         .badge-expense { background: rgba(248,113,113,0.1); color: var(--accent2); }
 
-        /* ── Amount ── */
         .amount { font-family: 'DM Mono', monospace; font-size: 13px; }
         .amount-income { color: var(--accent); }
         .amount-expense { color: var(--accent2); }
 
-        /* ── Forms ── */
         .form-input, .form-select, .form-textarea {
             width: 100%; background: var(--surface2);
             border: 1px solid var(--border); border-radius: 8px;
@@ -165,7 +155,6 @@
         .field-error { color: var(--accent2); font-size: 12px; margin-top: 4px; }
         .form-input.has-error, .form-select.has-error { border-color: var(--accent2); }
 
-        /* ── Type selector ── */
         .type-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .type-option { position: relative; }
         .type-option input { position: absolute; opacity: 0; width: 0; height: 0; }
@@ -178,7 +167,6 @@
         .type-option input:checked + .income-label { background: rgba(110,231,183,0.1); border-color: var(--accent); color: var(--accent); }
         .type-option input:checked + .expense-label { background: rgba(248,113,113,0.1); border-color: var(--accent2); color: var(--accent2); }
 
-        /* ── Filter bar ── */
         .filter-bar {
             background: var(--surface); border: 1px solid var(--border);
             border-radius: 12px; padding: 16px 20px;
@@ -187,7 +175,6 @@
         }
         .filter-bar .form-input, .filter-bar .form-select { width: auto; flex: 1; min-width: 140px; }
 
-        /* ── Pagination override ── */
         .pagination-wrap { margin-top: 16px; }
         .pagination-wrap nav { display: flex; justify-content: flex-end; }
         .pagination-wrap span[aria-current="page"] > span,
@@ -204,11 +191,9 @@
             color: var(--accent) !important;
         }
 
-        /* ── Empty state ── */
         .empty-state { text-align: center; padding: 48px 24px; color: var(--muted); font-size: 14px; }
         .empty-icon { font-size: 36px; margin-bottom: 12px; opacity: 0.4; }
 
-        /* ── Export dropdown ── */
         .export-wrap { position: relative; }
         .export-menu {
             display: none;
@@ -235,7 +220,6 @@
 </head>
 <body>
 
-{{-- Sidebar --}}
 <aside class="sidebar">
     <div class="sidebar-logo">
         <span>Track<em>Wise</em></span>
@@ -285,13 +269,10 @@
     </div>
 </aside>
 
-{{-- Main --}}
 <div class="main-wrap">
     <header class="topbar">
         <span class="page-title">@yield('title', 'Dashboard')</span>
         <div class="topbar-actions">
-
-            {{-- Export Dropdown --}}
             <div class="export-wrap" id="exportWrap">
                 <button class="btn btn-ghost" id="exportBtn">
                     <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -336,20 +317,20 @@
 </div>
 
 <script>
-  const exportBtn = document.getElementById('exportBtn')
-  const exportMenu = document.getElementById('exportMenu')
-  const exportWrap = document.getElementById('exportWrap')
+    const exportBtn = document.getElementById('exportBtn')
+    const exportMenu = document.getElementById('exportMenu')
+    const exportWrap = document.getElementById('exportWrap')
 
-  exportBtn.addEventListener('click', (e) => {
-    e.stopPropagation()
-    exportMenu.classList.toggle('open')
-  })
+    exportBtn.addEventListener('click', (e) => {
+        e.stopPropagation()
+        exportMenu.classList.toggle('open')
+    })
 
-  document.addEventListener('click', (e) => {
-    if (!exportWrap.contains(e.target)) {
-      exportMenu.classList.remove('open')
-    }
-  })
+    document.addEventListener('click', (e) => {
+        if (!exportWrap.contains(e.target)) {
+            exportMenu.classList.remove('open')
+        }
+    })
 </script>
 @stack('scripts')
 </body>

@@ -29,7 +29,7 @@
             justify-content: center;
         }
 
-        /* Subtle grid background */
+        
         body::before {
             content: '';
             position: fixed;

@@ -13,7 +13,6 @@
     </p>
 </div>
 
-{{-- Stat Cards --}}
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
     <div class="stat-card stat-income">
         <div class="stat-label">Total Income</div>
@@ -26,16 +25,14 @@
         <div class="stat-sub">This month</div>
     </div>
     <div class="stat-card stat-balance">
-        <div class="stat-label">Net Balance</div>
+        <div class="stat-label">Total Revenue</div>
         <div class="stat-value">&#8369;{{ number_format($balance, 2) }}</div>
         <div class="stat-sub">Income minus expenses</div>
     </div>
 </div>
 
-{{-- Charts --}}
 <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 16px; margin-bottom: 24px;">
 
-    {{-- Pie Card with Tabs --}}
     <div class="card">
         <div class="card-header">
             <div style="display: flex; gap: 6px;">
@@ -57,7 +54,6 @@
         </div>
     </div>
 
-    {{-- Bar Chart --}}
     <div class="card">
         <div class="card-header">
             <span class="card-title">Monthly Overview</span>
@@ -70,7 +66,6 @@
 
 </div>
 
-{{-- Recent Transactions --}}
 <div class="card">
     <div class="card-header">
         <span class="card-title">Recent Transactions</span>
@@ -124,63 +119,63 @@
 
 @push('scripts')
 <script>
-  var COLORS = ['#6ee7b7','#f87171','#60a5fa','#fbbf24','#a78bfa','#fb7185','#34d399'];
-  var expenseData = {!! json_encode($expenseByCategory) !!};
-  var incomeData  = {!! json_encode($incomeByCategory) !!};
-  var monthlyData = {!! json_encode($monthlyData) !!};
+    var COLORS = ['#6ee7b7', '#f87171', '#60a5fa', '#fbbf24', '#a78bfa', '#fb7185', '#34d399']
+    var expenseData = {!! json_encode($expenseByCategory) !!}
+    var incomeData = {!! json_encode($incomeByCategory) !!}
+    var monthlyData = {!! json_encode($monthlyData) !!}
 
-  var PIE_OPTIONS = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom', labels: { padding: 16, font: { size: 11, family: 'DM Sans' } } }
-    },
-    cutout: '65%'
-  };
-
-  new Chart(document.getElementById('expensesPieChart'), {
-    type: 'doughnut',
-    data: {
-      labels: Object.keys(expenseData),
-      datasets: [{ data: Object.values(expenseData), backgroundColor: COLORS, borderColor: '#16181f', borderWidth: 3 }]
-    },
-    options: PIE_OPTIONS
-  });
-
-  new Chart(document.getElementById('incomePieChart'), {
-    type: 'doughnut',
-    data: {
-      labels: Object.keys(incomeData),
-      datasets: [{ data: Object.values(incomeData), backgroundColor: COLORS, borderColor: '#16181f', borderWidth: 3 }]
-    },
-    options: PIE_OPTIONS
-  });
-
-  new Chart(document.getElementById('barChart'), {
-    type: 'bar',
-    data: {
-      labels: monthlyData.map(function(m) { return m.month; }),
-      datasets: [
-        { label: 'Income',   data: monthlyData.map(function(m) { return m.income; }),  backgroundColor: 'rgba(110,231,183,0.7)', borderRadius: 4 },
-        { label: 'Expenses', data: monthlyData.map(function(m) { return m.expense; }), backgroundColor: 'rgba(248,113,113,0.7)', borderRadius: 4 }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { labels: { font: { size: 11, family: 'DM Sans' } } } },
-      scales: {
-        x: { grid: { color: '#2a2d3a' }, ticks: { font: { size: 11 } } },
-        y: { grid: { color: '#2a2d3a' }, ticks: { font: { size: 11 } } }
-      }
+    var PIE_OPTIONS = {
+        responsive: true,
+        plugins: {
+            legend: { position: 'bottom', labels: { padding: 16, font: { size: 11, family: 'DM Sans' } } }
+        },
+        cutout: '65%'
     }
-  });
 
-  function switchPieTab(tab) {
-    document.getElementById('expensesPieChart').style.display = tab === 'expense' ? 'block' : 'none';
-    document.getElementById('incomePieChart').style.display   = tab === 'income'  ? 'block' : 'none';
-    document.getElementById('tab-expense').style.background   = tab === 'expense' ? 'var(--accent)' : 'transparent';
-    document.getElementById('tab-expense').style.color        = tab === 'expense' ? '#0f1117' : 'var(--muted)';
-    document.getElementById('tab-income').style.background    = tab === 'income'  ? 'var(--accent)' : 'transparent';
-    document.getElementById('tab-income').style.color         = tab === 'income'  ? '#0f1117' : 'var(--muted)';
-  }
+    new Chart(document.getElementById('expensesPieChart'), {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(expenseData),
+            datasets: [{ data: Object.values(expenseData), backgroundColor: COLORS, borderColor: '#16181f', borderWidth: 3 }]
+        },
+        options: PIE_OPTIONS
+    })
+
+    new Chart(document.getElementById('incomePieChart'), {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(incomeData),
+            datasets: [{ data: Object.values(incomeData), backgroundColor: COLORS, borderColor: '#16181f', borderWidth: 3 }]
+        },
+        options: PIE_OPTIONS
+    })
+
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: monthlyData.map(function(m) { return m.month }),
+            datasets: [
+                { label: 'Income', data: monthlyData.map(function(m) { return m.income }), backgroundColor: 'rgba(110,231,183,0.7)', borderRadius: 4 },
+                { label: 'Expenses', data: monthlyData.map(function(m) { return m.expense }), backgroundColor: 'rgba(248,113,113,0.7)', borderRadius: 4 }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { labels: { font: { size: 11, family: 'DM Sans' } } } },
+            scales: {
+                x: { grid: { color: '#2a2d3a' }, ticks: { font: { size: 11 } } },
+                y: { grid: { color: '#2a2d3a' }, ticks: { font: { size: 11 } } }
+            }
+        }
+    })
+
+    function switchPieTab(tab) {
+        document.getElementById('expensesPieChart').style.display = tab === 'expense' ? 'block' : 'none'
+        document.getElementById('incomePieChart').style.display = tab === 'income' ? 'block' : 'none'
+        document.getElementById('tab-expense').style.background = tab === 'expense' ? 'var(--accent)' : 'transparent'
+        document.getElementById('tab-expense').style.color = tab === 'expense' ? '#0f1117' : 'var(--muted)'
+        document.getElementById('tab-income').style.background = tab === 'income' ? 'var(--accent)' : 'transparent'
+        document.getElementById('tab-income').style.color = tab === 'income' ? '#0f1117' : 'var(--muted)'
+    }
 </script>
 @endpush
