@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <title>Transactions Export</title>
     <style>
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        @font-face {
+            font-family: 'DejaVu Sans';
+            src: url('{{ storage_path("fonts/DejaVuSans.ttf") }}');
+        }
 
         body {
             font-family: 'DejaVu Sans', sans-serif;
@@ -164,17 +170,17 @@
         <tr>
             <td style="width: 33%; padding: 14px 18px; background: #f0fdf4; border-top: 3px solid #059669; border-radius: 6px;">
                 <div style="font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #6b7280; margin-bottom: 5px;">Total Income</div>
-                <div style="font-size: 17px; font-weight: 700; color: #059669;">&#8369;{{ number_format($totalIncome, 2) }}</div>
+                <div style="font-size: 17px; font-weight: 700; color: #059669;">PHP {{ number_format($totalIncome, 2) }}</div>
             </td>
             <td style="width: 4px;"></td>
             <td style="width: 33%; padding: 14px 18px; background: #fef2f2; border-top: 3px solid #dc2626; border-radius: 6px;">
                 <div style="font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #6b7280; margin-bottom: 5px;">Total Expenses</div>
-                <div style="font-size: 17px; font-weight: 700; color: #dc2626;">&#8369;{{ number_format($totalExpense, 2) }}</div>
+                <div style="font-size: 17px; font-weight: 700; color: #dc2626;">PHP {{ number_format($totalExpense, 2) }}</div>
             </td>
             <td style="width: 4px;"></td>
             <td style="width: 33%; padding: 14px 18px; background: #eff6ff; border-top: 3px solid #2563eb; border-radius: 6px;">
                 <div style="font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #6b7280; margin-bottom: 5px;">Net Balance</div>
-                <div style="font-size: 17px; font-weight: 700; color: #2563eb;">&#8369;{{ number_format($balance, 2) }}</div>
+                <div style="font-size: 17px; font-weight: 700; color: #2563eb;">PHP {{ number_format($balance, 2) }}</div>            
             </td>
         </tr>
     </table>
@@ -205,7 +211,7 @@
                     </td>
                     <td style="color: #6b7280;">{{ $transaction->category }}</td>
                     <td class="text-right {{ $transaction->type === 'income' ? 'amount-income' : 'amount-expense' }}">
-                        {{ $transaction->type === 'income' ? '+' : '-' }}&#8369;{{ number_format($transaction->amount, 2) }}
+                        {{ $transaction->type === 'income' ? '+' : '-' }}PHP {{ number_format($transaction->amount, 2) }}
                     </td>
                     <td style="color: #9ca3af; font-size: 10px;">{{ $transaction->description ?? '—' }}</td>
                 </tr>
